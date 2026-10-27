@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Orders ({{ mode }}){% endblock title %}
+
+{% block content %}
+<h1>Recent orders <small class="text-muted">{{ mode }}</small></h1>
+<p>Open the Debug Toolbar's <strong>SQL</strong> panel and compare this page with
+  <a href="{% url 'orders:demo-slow' %}">slow</a> / <a href="{% url 'orders:demo-fast' %}">fast</a>.</p>
+<table class="table">
+  <thead><tr><th>#</th><th>User</th><th>Status</th><th>Items</th><th>Total</th></tr></thead>
+  <tbody>
+  {% for order in orders %}
+    <tr>
+      <td>{{ order.pk }}</td>
+      {# forward FK: 1 extra query per row unless select_related("user") #}
+      <td>{{ order.user.email }}</td>
+      <td>{{ order.get_status_display }}</td>
+      <td>
+        <ul class="mb-0">
+          {# reverse FK: 1 extra query per order unless prefetch_related("items") #}
+          {% for item in order.items.all %}
+            {# FK on the item: 1 per item unless select_related inside the Prefetch #}
+            <li>{{ item.quantity }} x {{ item.product.name }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+      <td>{{ order.total }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="5">No orders yet. Run <code>python manage.py seed_demo</code>.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

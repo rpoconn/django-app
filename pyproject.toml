@@ -20,10 +20,13 @@ dependencies = [
   "django-allauth[mfa]==65.19.7",
   "django-anymail==15.2",
   "django-celery-beat==2.9.0",
+  "django-cors-headers==4.9.0",
   "django-crispy-forms==2.7",
   "django-environ==0.14.0",
   "django-model-utils==5.0.0",
   "django-redis==7.0.0",
+  "djangorestframework==3.18.3",
+  "drf-spectacular==0.30.0",
   "flower==2.2.0",
   "gunicorn==26.2.0",
   "hiredis==3.4.2",
@@ -42,6 +45,7 @@ dev = [
   "django-extensions==4.1",
   "django-stubs[compatible-mypy]==6.1.2",
   "django-upgrade==1.33.0",
+  "djangorestframework-stubs==3.18.1",
   "djlint==1.46.4",
   "factory-boy==3.3.3",
   "ipdb==0.13.13",
@@ -140,6 +144,8 @@ lint.ignore = [
   # https://github.com/astral-sh/ruff/issues/7871
 ]
 lint.isort.force-single-line = true
+# Tests are full of literal expected values; "magic number" warnings are noise there.
+lint.per-file-ignores."**/tests/**" = [ "PLR2004" ]
 
 # ==== pyproject-fmt ====
 [tool.pyproject-fmt]
@@ -174,6 +180,7 @@ warn_redundant_casts = true
 warn_unused_configs = true
 plugins = [
   "mypy_django_plugin.main",
+  "mypy_drf_plugin.main",
 ]
 
 [[tool.mypy.overrides]]

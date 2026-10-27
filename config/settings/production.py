@@ -3,6 +3,7 @@ from .base import *  # noqa: F403
 from .base import DATABASES
 from .base import INSTALLED_APPS
 from .base import REDIS_URL
+from .base import SPECTACULAR_SETTINGS
 from .base import env
 
 # GENERAL
@@ -149,6 +150,11 @@ LOGGING = {
     },
 }
 
-
+# django-rest-framework
+# -------------------------------------------------------------------------------
+# Tools that generate code samples can use SERVERS to point to the correct domain
+SPECTACULAR_SETTINGS["SERVERS"] = [
+    {"url": "https://example.com", "description": "Production server"},
+]
 # Your stuff...
 # ------------------------------------------------------------------------------
